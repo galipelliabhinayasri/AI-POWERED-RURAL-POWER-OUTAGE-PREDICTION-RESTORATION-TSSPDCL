@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TSSPDCL AI Rural Outage Predictor & Restoration System</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Chart.js for data visualization -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Lucide Icons via CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- Top Header -->
+    <header>
+      <div class="header-main">
+        <div class="header-title-area">
+          <h1>
+            <i data-lucide="zap"></i>
+            <span data-tr="title">TSSPDCL Rural Power Outage Predictor</span>
+          </h1>
+          <p data-tr="subtitle">Real-Time Predictive Risk Dashboard & Restoration Management Engine (Telangana State)</p>
+        </div>
+        
+        <div style="display: flex; align-items: center; gap: 15px;">
+          <!-- Operations Budget -->
+          <div class="budget-tracker">
+            <i data-lucide="wallet"></i>
+            <span data-tr="budget_lbl">Budget</span>: <span id="budget-amount">₹5.00</span> <span data-tr="lakhs_lbl">Lakhs</span>
+          </div>
+
+          <!-- Language Selector -->
+          <div style="display: flex; gap: 4px; background: rgba(255,255,255,0.02); padding: 4px; border-radius: 8px; border: 1px solid var(--border-color);">
+            <button class="lang-btn active" id="lang-en" onclick="setLanguage('en')">EN</button>
+            <button class="lang-btn" id="lang-te" onclick="setLanguage('te')">తెలుగు</button>
+            <button class="lang-btn" id="lang-hi" onclick="setLanguage('hi')">हिन्दी</button>
+          </div>
+
+          <!-- System Clock -->
+          <div class="system-clock">
+            <i data-lucide="clock"></i>
+            <span id="live-timestamp">2026-06-21 15:37:31</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bilingual Severe Weather Warning Alert Ticker -->
+      <div id="weather-ticker" class="weather-alert-ticker healthy">
+        <span class="alert-badge" id="ticker-badge">Normal</span>
+        <span class="ticker-text" id="ticker-message">Grid Status: Healthy. Monitoring environmental sensors.</span>
+      </div>
+    </header>
+
+    <!-- Main Dashboard Grid -->
+    <div class="dashboard-grid">
+      
+      <!-- Left Panel: Environmental Control Console -->
+      <section class="glass-card" id="environmental-console">
+        <div class="card-title">
+          <i data-lucide="sliders"></i>
+          <h2 data-tr="env_controls">Environmental Controls</h2>
+        </div>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -8px;" data-tr="env_controls_sub">Adjust sensors to simulate stress and trigger real-time predictions.</p>
+
+        <!-- Sliders -->
+        <div class="slider-group">
+          <div class="slider-label">
+            <span data-tr="temp_label">Ambient Temperature</span>
+            <span class="slider-val" id="val-temp">32°C</span>
+          </div>
+          <input type="range" id="input-temp" min="15" max="50" value="32">
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-label">
+            <span data-tr="wind_label">Wind Velocity</span>
+            <span class="slider-val" id="val-wind">15 km/h</span>
+          </div>
+          <input type="range" id="input-wind" min="0" max="90" value="15">
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-label">
+            <span data-tr="rain_label">Rainfall Intensity</span>
+            <span class="slider-val" id="val-rain">0 mm/h</span>
+          </div>
+          <input type="range" id="input-rain" min="0" max="100" value="0">
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-label">
+            <span data-tr="demand_label">Overall Grid Demand</span>
+            <span class="slider-val" id="val-demand">100%</span>
+          </div>
+          <input type="range" id="input-demand" min="50" max="180" value="100">
+        </div>
+
+        <!-- Presets -->
+        <div style="margin-top: 10px;">
+          <h3 style="font-size: 0.9rem; margin-bottom: 8px; font-weight: 600;" data-tr="weather_presets">Simulation Weather Presets</h3>
+          <div class="weather-presets">
+            <button class="btn-preset active" id="preset-clear" onclick="setPreset('clear')">
+              <i data-lucide="sun"></i><span data-tr="preset_clear">Clear</span>
+            </button>
+            <button class="btn-preset" id="preset-heatwave" onclick="setPreset('heatwave')">
+              <i data-lucide="thermometer-sun"></i><span data-tr="preset_heat">Heatwave</span>
+            </button>
+            <button class="btn-preset" id="preset-monsoon" onclick="setPreset('monsoon')">
+              <i data-lucide="cloud-rain"></i><span data-tr="preset_rain">Monsoon</span>
+            </button>
+            <button class="btn-preset" id="preset-cyclonic" onclick="setPreset('cyclonic')">
+              <i data-lucide="wind"></i><span data-tr="preset_gale">Cyclone</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Manual Event Trigger -->
+        <div style="margin-top: 10px; border-top: 1px solid var(--border-color); padding-top: 15px;">
+          <h3 style="font-size: 0.9rem; margin-bottom: 8px; font-weight: 600;" data-tr="manual_triggers">Manual Event Generators</h3>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-secondary" style="flex: 1; padding: 8px;" onclick="triggerLightningStrike()">
+              <i data-lucide="cloud-lightning" style="width: 14px;"></i> <span data-tr="lightning_btn">Lightning Strike</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Center Panel: Grid Map & Restoration Hub -->
+      <main style="display: flex; flex-direction: column; gap: 20px;">
+        
+        <!-- Live Map Card -->
+        <section class="glass-card" style="flex: 1;">
+          <div class="card-title">
+            <i data-lucide="map"></i>
+            <h2 data-tr="grid_layout">Live Rural Grid Layout</h2>
+            <span style="margin-left: auto; font-size: 0.75rem; color: var(--text-muted); display: flex; align-items: center; gap: 4px;">
+              <span style="width: 8px; height: 8px; background: var(--color-healthy); border-radius: 50%;"></span> <span data-tr="healthy_legend">Healthy</span>
+              <span style="width: 8px; height: 8px; background: var(--color-warning); border-radius: 50%;"></span> <span data-tr="risk_legend">Risk</span>
+              <span style="width: 8px; height: 8px; background: var(--color-danger); border-radius: 50%;"></span> <span data-tr="outage_legend">Outage</span>
+            </span>
+          </div>
+
+          <div class="grid-map-container">
+            <div class="map-wrapper">
+              <!-- SVG Connector Overlay -->
+              <svg id="svg-connectors" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1;">
+                <!-- Dynamically loaded lines -->
+              </svg>
+              <!-- Map Canvas for Nodes -->
+              <div class="map-canvas" id="map-canvas">
+                <!-- Dynamically created sector nodes will be placed here -->
+              </div>
+            </div>
+
+            <!-- Inspect Selected Sector -->
+            <div id="inspector-panel" class="sector-inspection">
+              <div class="inspection-header">
+                <span class="inspection-title" id="inspect-name" data-tr="select_sector">Select a sector to inspect details</span>
+                <span class="crew-status-badge available" id="inspect-status-badge" data-tr="status_label">HEALTHY</span>
+              </div>
+              <div class="stat-grid" id="inspect-stats-grid">
+                <div class="stat-box">
+                  <div class="stat-box-label" data-tr="outage_prob_lbl">Outage Probability</div>
+                  <div class="stat-box-val" id="inspect-prob">0%</div>
+                </div>
+                <div class="stat-box">
+                  <div class="stat-box-label" data-tr="active_load_lbl">Active Load</div>
+                  <div class="stat-box-val" id="inspect-load">0 MW</div>
+                </div>
+                <div class="stat-box">
+                  <div class="stat-box-label" data-tr="tree_cover_lbl">Tree Canopy Density</div>
+                  <div class="stat-box-val" id="inspect-tree">0%</div>
+                </div>
+                <div class="stat-box">
+                  <div class="stat-box-label" data-tr="comp_age_lbl">Component Age</div>
+                  <div class="stat-box-val" id="inspect-age">0 Years</div>
+                </div>
+              </div>
+              
+              <!-- Sector Actions -->
+              <div style="display: flex; gap: 8px; margin-top: 8px;" id="sector-actions">
+                <button class="btn" style="flex: 1;" id="btn-trim" onclick="performVegetationTrimming()" disabled>
+                  <i data-lucide="scissors"></i> <span data-tr="trim_btn">Trim Vegetation (₹25k)</span>
+                </button>
+                <button class="btn btn-secondary" style="flex: 1;" id="btn-upgrade" onclick="performComponentUpgrade()" disabled>
+                  <i data-lucide="trending-up"></i> <span data-tr="upgrade_btn">Upgrade Grid (₹1.5L)</span>
+                </button>
+                <button class="btn btn-danger" style="flex: 1;" id="btn-force-outage" onclick="simulateManualOutage()" disabled>
+                  <i data-lucide="zap-off"></i> <span data-tr="force_outage_btn">Force Outage</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Active Outage & Restoration Hub -->
+        <section class="glass-card">
+          <div class="card-title">
+            <i data-lucide="wrench"></i>
+            <h2 data-tr="active_outages">Active Outages & Restoration Monitor</h2>
+          </div>
+          <div class="outage-monitor-container" id="active-outages-list">
+            <div style="text-align: center; color: var(--text-muted); padding: 20px; font-size: 0.9rem;" id="no-outages-msg">
+              <i data-lucide="shield-check" style="width: 40px; height: 40px; color: var(--color-healthy); margin-bottom: 8px; display: block; margin-left: auto; margin-right: auto;"></i>
+              No active outages detected. Grid operations stable.
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- Right Panel: Operations & Recommendations Console -->
+      <aside style="display: flex; flex-direction: column; gap: 20px;">
+        
+        <!-- Smart Dispatch Dashboard -->
+        <section class="glass-card">
+          <div class="card-title">
+            <i data-lucide="users"></i>
+            <h2 data-tr="crew_mgmt">Restoration Crew Management</h2>
+          </div>
+          <div class="crew-list" id="crews-container">
+            <!-- Dynamically populated crew list -->
+          </div>
+        </section>
+
+        <!-- AI Predictive Recommendations -->
+        <section class="glass-card">
+          <div class="card-title">
+            <i data-lucide="sparkles"></i>
+            <h2 data-tr="ai_recs">AI Assistant Recommendations</h2>
+          </div>
+          <div class="rec-list" id="ai-recommendations">
+            <div class="rec-item">
+              <i data-lucide="info"></i>
+              <div>No immediate action needed. Environmental conditions are within normal parameters.</div>
+            </div>
+          </div>
+        </section>
+        
+        <!-- Emergency Load Shedding Panel -->
+        <section class="glass-card">
+          <div class="card-title">
+            <i data-lucide="power"></i>
+            <h2 data-tr="load_shedding">Smart Load Shedding Planner</h2>
+          </div>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -8px;" data-tr="load_shedding_sub">Shed agricultural/non-essential load to protect high-risk transformer systems.</p>
+          <div style="display: flex; flex-direction: column; gap: 10px;" id="shedding-list">
+            <!-- Dynamically loaded sectors with load shedding switches -->
+          </div>
+        </section>
+
+      </aside>
+
+    </div>
+
+    <!-- Bottom Analytics Grid -->
+    <div class="analytics-grid">
+      
+      <!-- Chart Dashboard -->
+      <section class="glass-card" style="min-height: 280px;">
+        <div class="card-title">
+          <i data-lucide="bar-chart-3"></i>
+          <h2 data-tr="analytics">Predictive Analytics & Historical Correlation</h2>
+        </div>
+        <div class="chart-container-flex">
+          <div class="chart-wrapper">
+            <canvas id="risk-trend-chart"></canvas>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="historical-outages-chart"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- Live Event Logs Console -->
+      <section class="glass-card" style="min-height: 280px;">
+        <div class="card-title">
+          <i data-lucide="terminal"></i>
+          <h2 data-tr="ops_logs">Real-Time System Operations Logs</h2>
+        </div>
+        <div class="logs-console" id="system-logs">
+          <!-- Dynamically populated real-time log statements -->
+        </div>
+      </section>
+
+    </div>
+
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script>
+    // Initialize Lucide icons on page load
+    lucide.createIcons();
+  </script>
+</body>
+</html>
