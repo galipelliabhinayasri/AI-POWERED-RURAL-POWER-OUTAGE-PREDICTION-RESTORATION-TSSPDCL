@@ -1,7 +1,7 @@
 # AI-Powered Rural Power Outage Prediction & Restoration System (TSSPDCL Edition)
 
 <p align="center">
-  <img src="system_logo.png" alt="TSSPDCL Outage Predictor Logo" width="220">
+  <img src="project_thumbnail.png" alt="TSSPDCL Outage Predictor Dashboard Banner" width="650">
 </p>
 
 This repository hosts a high-fidelity, interactive **Predictive Risk Dashboard & Restoration Management Engine** calibrated for rural electricity distribution grids in Telangana. It simulates environmental stressors (temperature, cyclonic winds, monsoon rainfall) and grid loads to forecast outage probabilities and calculate Estimated Restoration Times (ERT) for the **TSSPDCL (Southern Power Distribution Company of Telangana Limited)** grid.
@@ -69,6 +69,15 @@ $$\text{ERT} = \text{Base Cause Time} \times \text{Weather Multiplier} \times \t
 * **Operational Budget Economy (₹ Lakhs)**: Includes a gamified budget. Grid trimming costs ₹25k; transformer upgrades cost ₹1.5L. Successful outages yield revenue incentives (up to ₹1.2L) back to the state wallet.
 * **Crew Dispatch & Fatigue Monitor**: Dispatch specialized units (*TSSPDCL Kakatiya Warriors*, *Singareni Grid Division*, *Charminar Rapid Linemen*). Crews reduce restoration times but accumulate fatigue, requiring shifts of rest.
 * **Bilingual Severe Weather Alerts**: Integrated IMD warning banner showing alerts in English/Telugu.
+
+---
+
+## 🖥️ Dashboard Interface Preview
+Below is a preview of the interactive dark-mode dashboard simulating environmental stress and substation loading:
+
+<p align="center">
+  <img src="dashboard_screenshot.png" alt="TSSPDCL Outage Predictor Dashboard Screenshot" width="700">
+</p>
 
 ---
 
